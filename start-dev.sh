@@ -3,6 +3,7 @@ set -e
 
 SERVICE_NAME="gig-dicionario-frontend"
 COMPOSE_FILE="docker-compose.yml"
+DOCKER_PORT="3742"
 
 echo "🧹 Limpando containers antigos..."
 docker compose down --remove-orphans
@@ -22,7 +23,7 @@ docker compose up -d
 
 echo ""
 echo "🌍 Projeto iniciado com sucesso!"
-echo "Acesse: http://localhost:5173"
+echo "Acesse: http://localhost:${DOCKER_PORT}"
 echo ""
 echo "📜 Logs (Ctrl+C para sair):"
 echo ""

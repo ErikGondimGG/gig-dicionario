@@ -7,8 +7,8 @@
     "config": "tailwind.config.js",
     "css": "src/index.css",
     "baseColor": "neutral",
-    "cssVariables": true,
-    "prefix": ""
+    "cssVariables": false,
+    "prefix": "tw-"
   },
   "iconLibrary": "lucide",
   "aliases": {
@@ -18,5 +18,7 @@
     "lib": "@/lib",
     "hooks": "@/hooks"
   },
-  "registries": {}
+  "registries": {
+    "@magicui": "https://magicui.design/r/{name}.json"
+  }
 }
