@@ -5,13 +5,13 @@ import {
   useEffect,
   useRef,
   useState,
-} from "react"
+} from "react";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 interface NeonColorsProps {
-  firstColor: string
-  secondColor: string
+  firstColor: string;
+  secondColor: string;
 }
 
 interface NeonGradientCardProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -21,14 +21,14 @@ interface NeonGradientCardProps extends React.HTMLAttributes<HTMLDivElement> {
    * @description
    * The component to be rendered as the card
    * */
-  as?: ReactElement
+  as?: ReactElement;
   /**
    * @default ""
    * @type string
    * @description
    * The className of the card
    */
-  className?: string
+  className?: string;
 
   /**
    * @default ""
@@ -36,7 +36,7 @@ interface NeonGradientCardProps extends React.HTMLAttributes<HTMLDivElement> {
    * @description
    * The children of the card
    * */
-  children?: ReactNode
+  children?: ReactNode;
 
   /**
    * @default 5
@@ -44,7 +44,7 @@ interface NeonGradientCardProps extends React.HTMLAttributes<HTMLDivElement> {
    * @description
    * The size of the border in pixels
    * */
-  borderSize?: number
+  borderSize?: number;
 
   /**
    * @default 20
@@ -52,7 +52,7 @@ interface NeonGradientCardProps extends React.HTMLAttributes<HTMLDivElement> {
    * @description
    * The size of the radius in pixels
    * */
-  borderRadius?: number
+  borderRadius?: number;
 
   /**
    * @default "{ firstColor: '#ff00aa', secondColor: '#00FFF1' }"
@@ -60,7 +60,7 @@ interface NeonGradientCardProps extends React.HTMLAttributes<HTMLDivElement> {
    * @description
    * The colors of the neon gradient
    * */
-  neonColors?: NeonColorsProps
+  neonColors?: NeonColorsProps;
 }
 
 export const NeonGradientCard: React.FC<NeonGradientCardProps> = ({
@@ -74,31 +74,31 @@ export const NeonGradientCard: React.FC<NeonGradientCardProps> = ({
   },
   ...props
 }) => {
-  const containerRef = useRef<HTMLDivElement>(null)
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0 })
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
   useEffect(() => {
     const updateDimensions = () => {
       if (containerRef.current) {
-        const { offsetWidth, offsetHeight } = containerRef.current
-        setDimensions({ width: offsetWidth, height: offsetHeight })
+        const { offsetWidth, offsetHeight } = containerRef.current;
+        setDimensions({ width: offsetWidth, height: offsetHeight });
       }
-    }
+    };
 
-    updateDimensions()
-    window.addEventListener("resize", updateDimensions)
+    updateDimensions();
+    window.addEventListener("resize", updateDimensions);
 
     return () => {
-      window.removeEventListener("resize", updateDimensions)
-    }
-  }, [])
+      window.removeEventListener("resize", updateDimensions);
+    };
+  }, []);
 
   useEffect(() => {
     if (containerRef.current) {
-      const { offsetWidth, offsetHeight } = containerRef.current
-      setDimensions({ width: offsetWidth, height: offsetHeight })
+      const { offsetWidth, offsetHeight } = containerRef.current;
+      setDimensions({ width: offsetWidth, height: offsetHeight });
     }
-  }, [children])
+  }, [children]);
 
   return (
     <div
@@ -119,28 +119,28 @@ export const NeonGradientCard: React.FC<NeonGradientCardProps> = ({
         } as CSSProperties
       }
       className={cn(
-        "tw-relative tw-z-10 tw-size-full tw-rounded-[var(--border-radius)]",
+        "relative z-10 size-full rounded-[var(--border-radius)]",
         className
       )}
       {...props}
     >
       <div
         className={cn(
-          "tw-relative tw-size-full tw-min-h-[inherit] tw-rounded-[var(--card-content-radius)] tw-bg-gray-100 tw-p-6",
-          "before:tw-absolute before:tw--top-[var(--border-size)] before:tw--left-[var(--border-size)] before:tw--z-10 before:tw-block",
-          "before:tw-h-[var(--pseudo-element-height)] before:tw-w-[var(--pseudo-element-width)] before:tw-rounded-[var(--border-radius)] before:tw-content-[]",
-          "before:tw-bg-[linear-gradient(0deg,var(--neon-first-color),var(--neon-second-color))] before:bg-[length:tw-100%_200%]",
-          "before:tw-animate-background-position-spin",
-          "after:tw-absolute after:tw--top-[var(--border-size)] after:tw--left-[var(--border-size)] after:tw--z-10 after:tw-block",
-          "after:tw-h-[var(--pseudo-element-height)] after:tw-w-[var(--pseudo-element-width)] after:tw-rounded-[var(--border-radius)] after:tw-blur-[var(--after-blur)] after:tw-content-[]",
-          "after:tw-bg-[linear-gradient(0deg,var(--neon-first-color),var(--neon-second-color))] after:bg-[length:tw-100%_200%] after:tw-opacity-80",
-          "after:tw-animate-background-position-spin",
-          "dark:tw-bg-neutral-900",
-          "tw-break-words"
+          "relative size-full min-h-[inherit] rounded-[var(--card-content-radius)] bg-gray-100 p-6",
+          "before:absolute before:-top-[var(--border-size)] before:-left-[var(--border-size)] before:-z-10 before:block",
+          "before:h-[var(--pseudo-element-height)] before:w-[var(--pseudo-element-width)] before:rounded-[var(--border-radius)] before:content-[]",
+          "before:bg-[linear-gradient(0deg,var(--neon-first-color),var(--neon-second-color))] before:bg-[length:100%_200%]",
+          "before:animate-background-position-spin",
+          "after:absolute after:-top-[var(--border-size)] after:-left-[var(--border-size)] after:-z-10 after:block",
+          "after:h-[var(--pseudo-element-height)] after:w-[var(--pseudo-element-width)] after:rounded-[var(--border-radius)] after:blur-[var(--after-blur)] after:content-[]",
+          "after:bg-[linear-gradient(0deg,var(--neon-first-color),var(--neon-second-color))] after:bg-[length:100%_200%] after:opacity-80",
+          "after:animate-background-position-spin",
+          "dark:bg-neutral-900",
+          "break-words"
         )}
       >
         {children}
       </div>
     </div>
-  )
-}
+  );
+};

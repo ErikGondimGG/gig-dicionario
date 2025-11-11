@@ -27,7 +27,7 @@ const DEFAULT_DISTANCE = 140;
 const DEFAULT_DISABLEMAGNIFICATION = false;
 
 const dockVariants = cva(
-  "supports-backdrop-blur:tw-bg-white/10 supports-backdrop-blur:dark:tw-bg-black/10 tw-mx-auto tw-mt-8 tw-flex tw-h-[58px] tw-w-max tw-items-center tw-justify-center tw-gap-2 tw-rounded-2xl tw-border tw-border-neutral-200 tw-p-2 tw-backdrop-blur-md dark:tw-border-neutral-800"
+  "supports-backdrop-blur:bg-white/10 supports-backdrop-blur:dark:bg-black/10 mx-auto mt-8 flex h-[58px] w-max items-center justify-center gap-2 rounded-2xl border border-neutral-200 p-2 backdrop-blur-md dark:border-neutral-800"
 );
 
 const Dock = React.forwardRef<HTMLDivElement, DockProps>(
@@ -135,9 +135,9 @@ const DockIcon = ({
       ref={ref}
       style={{ width: scaleSize, height: scaleSize, padding }}
       className={cn(
-        "tw-flex tw-aspect-square tw-cursor-pointer tw-items-center tw-justify-center tw-rounded-full",
+        "flex aspect-square cursor-pointer items-center justify-center rounded-full",
         disableMagnification &&
-          "hover:tw-bg-neutral-500 tw-transition-colors dark:hover:tw-bg-neutral-400",
+          "hover:bg-neutral-500 transition-colors dark:hover:bg-neutral-400",
         className
       )}
       {...props}
