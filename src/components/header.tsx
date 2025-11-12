@@ -10,7 +10,7 @@ export function Header() {
     <header className="fixed top-0 max-h-32  w-full z-50 bg-white/10 dark:bg-black/20 backdrop-blur-md border-b border-white/20 dark:border-white/10 shadow-md">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between py-3">
-          <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+          <h1 className="text-xl font-galactican text-gray-900 dark:text-gray-100">
             <AnimatedGradientText colorFrom="#006600" colorTo="#11ff11">
               Gigantão
             </AnimatedGradientText>

@@ -5,7 +5,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        StopD: ["StopD"],
+        galactican: ["Galactican Regular", "sans-serif"],
       },
       animation: {
         "shiny-text": "shiny-text 8s infinite",

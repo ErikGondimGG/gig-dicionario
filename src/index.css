@@ -1,9 +1,8 @@
 @font-face {
-  font-family: "StopD";
-  src: url("/fonts/STOPN.TTF") format("truetype");
-  font-weight: normal;
+  font-family: "Galactican Regular";
   font-style: normal;
-  font-display: swap;
+  font-weight: normal;
+  src: url("/fonts/GALACTIC.woff") format("woff");
 }
 
 @tailwind base;
@@ -95,6 +94,8 @@ html.dark {
 }
 
 @theme inline {
+  --font-galactican: "Galactican Regular", sans-serif;
+
   @keyframes shine {
     0% {
       background-position: 0% 0%;
