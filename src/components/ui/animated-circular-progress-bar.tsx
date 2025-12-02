@@ -1,12 +1,12 @@
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 interface AnimatedCircularProgressBarProps {
-  max?: number
-  min?: number
-  value: number
-  gaugePrimaryColor: string
-  gaugeSecondaryColor: string
-  className?: string
+  max?: number;
+  min?: number;
+  value: number;
+  gaugePrimaryColor: string;
+  gaugeSecondaryColor: string;
+  className?: string;
 }
 
 export function AnimatedCircularProgressBar({
@@ -17,13 +17,13 @@ export function AnimatedCircularProgressBar({
   gaugeSecondaryColor,
   className,
 }: AnimatedCircularProgressBarProps) {
-  const circumference = 2 * Math.PI * 45
-  const percentPx = circumference / 100
-  const currentPercent = Math.round(((value - min) / (max - min)) * 100)
+  const circumference = 2 * Math.PI * 45;
+  const percentPx = circumference / 100;
+  const currentPercent = Math.round(((value - min) / (max - min)) * 100);
 
   return (
     <div
-      className={cn("tw-relative tw-size-40 tw-text-2xl tw-font-semibold", className)}
+      className={cn("relative size-40 text-2xl font-semibold", className)}
       style={
         {
           "--circle-size": "100px",
@@ -39,12 +39,7 @@ export function AnimatedCircularProgressBar({
         } as React.CSSProperties
       }
     >
-      <svg
-        fill="none"
-        className="tw-size-full"
-        strokeWidth="2"
-        viewBox="0 100"
-      >
+      <svg fill="none" className="size-full" strokeWidth="2" viewBox="0 100">
         {currentPercent <= 90 && currentPercent >= 0 && (
           <circle
             cx="50"
@@ -54,7 +49,7 @@ export function AnimatedCircularProgressBar({
             strokeDashoffset="0"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className="tw-opacity-100"
+            className="opacity-100"
             style={
               {
                 stroke: gaugeSecondaryColor,
@@ -65,8 +60,7 @@ export function AnimatedCircularProgressBar({
                 transform:
                   "rotate(calc(1turn - 90deg (var(--gap-percent) * var(--percent-to-deg) var(--offset-factor-secondary)))) scaleY(-1)",
                 transition: "all var(--transition-length) ease var(--delay)",
-                transformOrigin:
-                  "calc(var(--circle-size) / 2)",
+                transformOrigin: "calc(var(--circle-size) / 2)",
               } as React.CSSProperties
             }
           />
@@ -79,7 +73,7 @@ export function AnimatedCircularProgressBar({
           strokeDashoffset="0"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="tw-opacity-100"
+          className="opacity-100"
           style={
             {
               stroke: gaugePrimaryColor,
@@ -91,18 +85,17 @@ export function AnimatedCircularProgressBar({
               transitionProperty: "stroke-dasharray,transform",
               transform:
                 "rotate(calc(-90deg + var(--gap-percent) * var(--offset-factor) var(--percent-to-deg)))",
-              transformOrigin:
-                "calc(var(--circle-size) / 2)",
+              transformOrigin: "calc(var(--circle-size) / 2)",
             } as React.CSSProperties
           }
         />
       </svg>
       <span
         data-current-value={currentPercent}
-        className="tw-animate-in tw-fade-in tw-absolute tw-inset-0 tw-m-auto tw-size-fit tw-delay-[var(--delay)] tw-duration-[var(--transition-length)] tw-ease-linear"
+        className="animate-in fade-in absolute inset-0 m-auto size-fit delay-[var(--delay)] duration-[var(--transition-length)] ease-linear"
       >
         {currentPercent}
       </span>
     </div>
-  )
+  );
 }

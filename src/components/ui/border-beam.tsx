@@ -1,52 +1,52 @@
-import { motion, MotionStyle, Transition } from "motion/react"
+import { motion, MotionStyle, Transition } from "motion/react";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 interface BorderBeamProps {
   /**
    * The size of the border beam.
    */
-  size?: number
+  size?: number;
   /**
    * The duration of the border beam.
    */
-  duration?: number
+  duration?: number;
   /**
    * The delay of the border beam.
    */
-  delay?: number
+  delay?: number;
   /**
    * The color of the border beam from.
    */
-  colorFrom?: string
+  colorFrom?: string;
   /**
    * The color of the border beam to.
    */
-  colorTo?: string
+  colorTo?: string;
   /**
    * The motion transition of the border beam.
    */
-  transition?: Transition
+  transition?: Transition;
   /**
    * The class name of the border beam.
    */
-  className?: string
+  className?: string;
   /**
    * The style of the border beam.
    */
-  style?: React.CSSProperties
+  style?: React.CSSProperties;
   /**
    * Whether to reverse the animation direction.
    */
-  reverse?: boolean
+  reverse?: boolean;
   /**
    * The initial offset position (0-100).
    */
-  initialOffset?: number
+  initialOffset?: number;
   /**
    * The border width of the beam.
    */
-  borderWidth?: number
+  borderWidth?: number;
 }
 
 export const BorderBeam = ({
@@ -64,7 +64,7 @@ export const BorderBeam = ({
 }: BorderBeamProps) => {
   return (
     <div
-      className="tw-pointer-events-none tw-absolute tw-inset-0 tw-rounded-[inherit] border-(length:tw---border-beam-width) tw-border-transparent [mask-image:tw-linear-gradient(transparent,transparent),linear-gradient(#000,#000)] [mask-composite:tw-intersect] [mask-clip:tw-padding-box,border-box]"
+      className="pointer-events-none absolute inset-0 rounded-[inherit] border-(length:--border-beam-width) border-transparent [mask-image:linear-gradient(transparent,transparent),linear-gradient(#000,#000)] [mask-composite:intersect] [mask-clip:padding-box,border-box]"
       style={
         {
           "--border-beam-width": `${borderWidth}px`,
@@ -73,8 +73,8 @@ export const BorderBeam = ({
     >
       <motion.div
         className={cn(
-          "tw-absolute tw-aspect-square",
-          "tw-bg-gradient-to-l tw-from-[var(--color-from)] tw-via-[var(--color-to)] tw-to-transparent",
+          "absolute aspect-square",
+          "bg-gradient-to-l from-[var(--color-from)] via-[var(--color-to)] to-transparent",
           className
         )}
         style={
@@ -101,5 +101,5 @@ export const BorderBeam = ({
         }}
       />
     </div>
-  )
-}
+  );
+};
