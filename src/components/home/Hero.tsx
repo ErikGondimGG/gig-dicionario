@@ -4,9 +4,11 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useSummary } from "@/hooks/useSummary";
 
 export default function HomeHero() {
-  const { data, isLoading, isError } = useSummary();
+  const { data, isLoading, isError, isFetching } = useSummary();
 
-  // console.log(JSON.stringify(data, null, 2));
+  const loading = isLoading || isFetching;
+
+  console.log(JSON.stringify(data, null, 2));
 
   const summary = data?.data;
 
@@ -27,8 +29,8 @@ export default function HomeHero() {
           <div className="grid grid-cols-5 gap-4 max-w-4xl mx-auto mt-12">
             <div className="text-center">
               <div className="text-4xl font-bold text-green-600 dark:text-green-400 min-w-[100px]">
-                {isLoading ? (
-                  <Skeleton className="h-10 w-20 mx-auto" />
+                {loading ? (
+                  <Skeleton className="h-3 mt-7 w-20 mx-auto" />
                 ) : isError ? (
                   <span className="text-red-500">—</span>
                 ) : (
@@ -42,8 +44,8 @@ export default function HomeHero() {
 
             <div className="text-center">
               <div className="text-4xl font-bold text-green-600 dark:text-green-400 min-w-[100px]">
-                {isLoading ? (
-                  <Skeleton className="h-10 w-20 mx-auto" />
+                {loading ? (
+                  <Skeleton className="h-3 mt-7 w-20 mx-auto" />
                 ) : isError ? (
                   <span className="text-red-500">—</span>
                 ) : (
@@ -57,8 +59,8 @@ export default function HomeHero() {
 
             <div className="text-center">
               <div className="text-4xl font-bold text-green-600 dark:text-green-400 min-w-[100px]">
-                {isLoading ? (
-                  <Skeleton className="h-10 w-20 mx-auto" />
+                {loading ? (
+                  <Skeleton className="h-3 mt-7 w-20 mx-auto" />
                 ) : isError ? (
                   <span className="text-red-500">—</span>
                 ) : (
@@ -72,8 +74,8 @@ export default function HomeHero() {
 
             <div className="text-center">
               <div className="text-4xl font-bold text-green-600 dark:text-green-400 min-w-[100px]">
-                {isLoading ? (
-                  <Skeleton className="h-10 w-20 mx-auto" />
+                {loading ? (
+                  <Skeleton className="h-3 mt-7 w-20 mx-auto" />
                 ) : isError ? (
                   <span className="text-red-500">—</span>
                 ) : (
@@ -87,8 +89,8 @@ export default function HomeHero() {
 
             <div className="text-center">
               <div className="text-4xl font-bold text-green-600 dark:text-green-400 min-w-[100px]">
-                {isLoading ? (
-                  <Skeleton className="h-10 w-20 mx-auto" />
+                {loading ? (
+                  <Skeleton className="h-3 mt-7 w-20 mx-auto" />
                 ) : isError ? (
                   <span className="text-red-500">—</span>
                 ) : (

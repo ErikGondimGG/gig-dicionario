@@ -1,31 +1,49 @@
-import { Header } from "@/components/header";
-import { BlurFade } from "@/components/ui/blur-fade";
 import TableCard from "@/components/dictionary/TableCard";
+import { Header } from "@/components/header";
+import LoadingContent from "@/components/loadingContent";
+import { BlurFade } from "@/components/ui/blur-fade";
 import { Input } from "@/components/ui/input";
+import Pagination from "@/components/ui/pagination";
+import { useTables } from "@/hooks/useTables";
 import { Search } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function DictionaryPage() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(12);
 
-  const tables = [
-    { name: "tblClientes", description: "Tabela de cadastro de clientes", fields: 24, type: "Master" },
-    { name: "tblPedidos", description: "Registro de pedidos de venda", fields: 18, type: "Transacional" },
-    { name: "tblProdutos", description: "Catálogo de produtos", fields: 32, type: "Master" },
-    { name: "tblEstoque", description: "Controle de estoque", fields: 12, type: "Operacional" },
-    { name: "tblFornecedores", description: "Cadastro de fornecedores", fields: 16, type: "Master" },
-    { name: "tblPagamentos", description: "Registro de pagamentos", fields: 10, type: "Financeiro" },
-  ];
+  // Debounce search query
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchQuery);
+      setPage(1);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
 
-  const filtered = tables.filter(t => 
-    t.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-    t.description.toLowerCase().includes(searchQuery.toLowerCase())
+  const { data, isLoading, isError, isFetching } = useTables(
+    page,
+    limit,
+    debouncedSearch || undefined
   );
+
+  // const tables = [
+  //   { name: "tblClientes", description: "Tabela de cadastro de clientes", fields: 24, type: "Master" },
+  //   { name: "tblPedidos", description: "Registro de pedidos de venda", fields: 18, type: "Transacional" },
+  //   { name: "tblProdutos", description: "Catálogo de produtos", fields: 32, type: "Master" },
+  //   { name: "tblEstoque", description: "Controle de estoque", fields: 12, type: "Operacional" },
+  //   { name: "tblFornecedores", description: "Cadastro de fornecedores", fields: 16, type: "Master" },
+  //   { name: "tblPagamentos", description: "Registro de pagamentos", fields: 10, type: "Financeiro" },
+  // ];
+
+  const tables = data?.data?.data || [];
 
   return (
     <div className="min-h-screen bg-white dark:bg-slate-900 text-slate-900 dark:text-white transition-colors">
       <Header />
-      
+
       <main className="pt-32 px-6 pb-12">
         <div className="max-w-7xl mx-auto">
           <BlurFade delay={0.1}>
@@ -51,14 +69,43 @@ export default function DictionaryPage() {
           </BlurFade>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filtered.map((table, i) => (
-              <TableCard key={table.name} table={table} i={i} />
-            ))}
+            {isLoading || isFetching ? (
+              <LoadingContent />
+            ) : isError ? (
+              <p>Erro ao carregar tabelas</p>
+            ) : (
+              tables.map((table, i) => (
+                <TableCard key={table.name} table={table} i={i} />
+              ))
+            )}
           </div>
 
-          {filtered.length === 0 && (
+          {!isLoading && !isFetching && tables && tables.length === 0 && (
             <div className="text-center py-12">
-              <p className="text-slate-500 dark:text-slate-400">Nenhuma tabela encontrada para "{searchQuery}"</p>
+              <p className="text-slate-500 dark:text-slate-400">
+                {debouncedSearch
+                  ? `Nenhuma tabela encontrada para "${debouncedSearch}"`
+                  : "Nenhuma tabela encontrada"}
+              </p>
+            </div>
+          )}
+
+          {/* Pagination */}
+          {data?.data?.pagination && (
+            <div className="max-w-7xl mx-auto">
+              <div className="mt-6">
+                <Pagination
+                  page={page}
+                  totalPages={data.data.pagination.total_pages}
+                  totalItems={data.data.pagination.total}
+                  limit={limit}
+                  onPageChange={(p) => setPage(p)}
+                  onLimitChange={(l) => {
+                    setLimit(l);
+                    setPage(1);
+                  }}
+                />
+              </div>
             </div>
           )}
         </div>

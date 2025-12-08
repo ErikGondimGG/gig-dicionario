@@ -44,6 +44,20 @@ function setStorageItem(key: string, value: string): void {
   }
 }
 
+function removeStorageItem(key: string): void {
+  if (typeof window !== "undefined") {
+    localStorage.removeItem(key);
+  }
+}
+
+function handleUnauthorized(): void {
+  removeStorageItem("auth_token");
+  removeStorageItem("refresh_token");
+  if (typeof window !== "undefined" && window.location.pathname !== "/login") {
+    window.location.href = "/login";
+  }
+}
+
 async function refreshAuthToken(): Promise<string | null> {
   const refresh = getStorageItem("refresh_token");
   if (!refresh) return null;
@@ -100,6 +114,14 @@ api.interceptors.response.use(
 
       try {
         const newToken = await refreshAuthToken();
+        
+        if (!newToken) {
+          processQueue(toApiError({ message: "Session expired" }), null);
+          isRefreshing = false;
+          handleUnauthorized();
+          return Promise.reject(toApiError({ message: "Session expired" }));
+        }
+        
         processQueue(null, newToken);
         isRefreshing = false;
 
@@ -111,6 +133,7 @@ api.interceptors.response.use(
         const apiErr = toApiError(refreshError);
         processQueue(apiErr, null);
         isRefreshing = false;
+        handleUnauthorized();
         return Promise.reject(apiErr);
       }
     }
