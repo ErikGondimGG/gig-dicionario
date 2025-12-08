@@ -1,30 +1,49 @@
+import TableCard from "@/components/dictionary/TableCard";
 import { Header } from "@/components/header";
+import LoadingContent from "@/components/loadingContent";
 import { BlurFade } from "@/components/ui/blur-fade";
 import { Input } from "@/components/ui/input";
+import Pagination from "@/components/ui/pagination";
+import { useTables } from "@/hooks/useTables";
 import { Search } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function DictionaryPage() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(12);
 
-  const tables = [
-    { name: "tblClientes", description: "Tabela de cadastro de clientes", fields: 24, type: "Master" },
-    { name: "tblPedidos", description: "Registro de pedidos de venda", fields: 18, type: "Transacional" },
-    { name: "tblProdutos", description: "Catálogo de produtos", fields: 32, type: "Master" },
-    { name: "tblEstoque", description: "Controle de estoque", fields: 12, type: "Operacional" },
-    { name: "tblFornecedores", description: "Cadastro de fornecedores", fields: 16, type: "Master" },
-    { name: "tblPagamentos", description: "Registro de pagamentos", fields: 10, type: "Financeiro" },
-  ];
+  // Debounce search query
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchQuery);
+      setPage(1);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
 
-  const filtered = tables.filter(t => 
-    t.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-    t.description.toLowerCase().includes(searchQuery.toLowerCase())
+  const { data, isLoading, isError, isFetching } = useTables(
+    page,
+    limit,
+    debouncedSearch || undefined
   );
+
+  // const tables = [
+  //   { name: "tblClientes", description: "Tabela de cadastro de clientes", fields: 24, type: "Master" },
+  //   { name: "tblPedidos", description: "Registro de pedidos de venda", fields: 18, type: "Transacional" },
+  //   { name: "tblProdutos", description: "Catálogo de produtos", fields: 32, type: "Master" },
+  //   { name: "tblEstoque", description: "Controle de estoque", fields: 12, type: "Operacional" },
+  //   { name: "tblFornecedores", description: "Cadastro de fornecedores", fields: 16, type: "Master" },
+  //   { name: "tblPagamentos", description: "Registro de pagamentos", fields: 10, type: "Financeiro" },
+  // ];
+
+  const tables = data?.data?.data || [];
 
   return (
     <div className="min-h-screen bg-white dark:bg-slate-900 text-slate-900 dark:text-white transition-colors">
       <Header />
-      
+
       <main className="pt-32 px-6 pb-12">
         <div className="max-w-7xl mx-auto">
           <BlurFade delay={0.1}>
@@ -50,36 +69,43 @@ export default function DictionaryPage() {
           </BlurFade>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filtered.map((table, i) => (
-              <BlurFade key={table.name} delay={0.3 + i * 0.05}>
-                <div className="p-6 rounded-xl bg-white/60 dark:bg-black/60 border border-gray-200 dark:border-neutral-800 shadow-sm hover:shadow-md transition-all cursor-pointer group">
-                  <div className="flex items-start justify-between mb-3">
-                    <h3 className="text-lg font-semibold group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">
-                      {table.name}
-                    </h3>
-                    <span className="text-xs px-2 py-1 rounded-md bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400">
-                      {table.type}
-                    </span>
-                  </div>
-                  <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
-                    {table.description}
-                  </p>
-                  <div className="flex items-center gap-4 text-xs text-slate-500 dark:text-slate-500">
-                    <span className="flex items-center gap-1">
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                      </svg>
-                      {table.fields} campos
-                    </span>
-                  </div>
-                </div>
-              </BlurFade>
-            ))}
+            {isLoading || isFetching ? (
+              <LoadingContent />
+            ) : isError ? (
+              <p>Erro ao carregar tabelas</p>
+            ) : (
+              tables.map((table, i) => (
+                <TableCard key={table.name} table={table} i={i} />
+              ))
+            )}
           </div>
 
-          {filtered.length === 0 && (
+          {!isLoading && !isFetching && tables && tables.length === 0 && (
             <div className="text-center py-12">
-              <p className="text-slate-500 dark:text-slate-400">Nenhuma tabela encontrada para "{searchQuery}"</p>
+              <p className="text-slate-500 dark:text-slate-400">
+                {debouncedSearch
+                  ? `Nenhuma tabela encontrada para "${debouncedSearch}"`
+                  : "Nenhuma tabela encontrada"}
+              </p>
+            </div>
+          )}
+
+          {/* Pagination */}
+          {data?.data?.pagination && (
+            <div className="max-w-7xl mx-auto">
+              <div className="mt-6">
+                <Pagination
+                  page={page}
+                  totalPages={data.data.pagination.total_pages}
+                  totalItems={data.data.pagination.total}
+                  limit={limit}
+                  onPageChange={(p) => setPage(p)}
+                  onLimitChange={(l) => {
+                    setLimit(l);
+                    setPage(1);
+                  }}
+                />
+              </div>
             </div>
           )}
         </div>
